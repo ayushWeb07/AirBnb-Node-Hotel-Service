@@ -3,6 +3,8 @@ import { serverConfig } from "./config/index.ts"
 import v1Router from "./routers/v1/index.router.ts"
 import { errorHandler } from "./middlewares/error.middleware.ts"
 import { attachCorrelationId } from "./middlewares/correlation.middleware.ts"
+import { logger } from "./config/logger.config.ts"
+import sequelize from "./db/models/sequelize.ts"
 
 // config app
 const app = express()
@@ -18,6 +20,9 @@ app.use("/api/v1", v1Router)
 app.use(errorHandler)
 
 // spin up the server
-app.listen(serverConfig.PORT, () => {
-  console.log(`Server listening on http://localhost:${serverConfig.PORT}`)
+app.listen(serverConfig.PORT, async () => {
+  logger.info(`Server listening on http://localhost:${serverConfig.PORT}`)
+
+  await sequelize.authenticate()
+  logger.info(`Successfully connected to the DB`)
 })
