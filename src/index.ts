@@ -19,10 +19,19 @@ app.use("/api/v1", v1Router)
 // setup the error middleware
 app.use(errorHandler)
 
-// spin up the server
-app.listen(serverConfig.PORT, async () => {
-  logger.info(`Server listening on http://localhost:${serverConfig.PORT}`)
+// spin up the server + DB
+const startServer = async () => {
+  try {
+    await sequelize.authenticate();
+    logger.info("Successfully connected to the DB");
 
-  await sequelize.authenticate()
-  logger.info(`Successfully connected to the DB`)
-})
+    app.listen(serverConfig.PORT, () => {
+      logger.info(`Server listening on http://localhost:${serverConfig.PORT}`);
+    });
+  } catch (error) {
+    logger.error("Unable to connect to the database:", error);
+    process.exit(1);
+  }
+};
+
+startServer();

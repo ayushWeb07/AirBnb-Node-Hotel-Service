@@ -7,14 +7,14 @@ export default {
     await queryInterface.addColumn("hotels", "createdAt", {
       type: DataTypes.DATE,
       allowNull: false,
-      defaultValue: new Date()
+      defaultValue: DataTypes.NOW
     })
 
     // add updatedAt column -> hotels table
     await queryInterface.addColumn("hotels", "updatedAt", {
       type: DataTypes.DATE,
       allowNull: false,
-      defaultValue: new Date()
+      defaultValue: DataTypes.NOW
     })
 
   },
