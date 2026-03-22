@@ -1,4 +1,4 @@
-import { dbConfig } from "./index.ts";
+import { dbConfig } from "./index";
 
 const config = {
   development: {
@@ -10,4 +10,4 @@ const config = {
   },
 };
 
-export default config;
+module.exports= config;
