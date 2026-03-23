@@ -35,31 +35,33 @@ const logger = winston.createLogger({
   ),
 
   transports: [
+    new winston.transports.Console(),
+
     // info + warn + error
     new DailyRotateFile({
-      level: 'info',
-      filename: 'logs/info-%DATE%.log',
-      datePattern: 'DD-MM-YYYY',
-      maxSize: '20m',
-      maxFiles: '14d'
+      level: "info",
+      filename: "logs/info-%DATE%.log",
+      datePattern: "DD-MM-YYYY",
+      maxSize: "20m",
+      maxFiles: "14d",
     }),
 
     // error
     new DailyRotateFile({
-      level: 'error',
-      filename: 'logs/error-%DATE%.log',
-      datePattern: 'DD-MM-YYYY',
-      maxSize: '20m',
-      maxFiles: '14d'
+      level: "error",
+      filename: "logs/error-%DATE%.log",
+      datePattern: "DD-MM-YYYY",
+      maxSize: "20m",
+      maxFiles: "14d",
     }),
-    
+
     // warn + error
     new DailyRotateFile({
-      level: 'warn',
-      filename: 'logs/warn-%DATE%.log',
-      datePattern: 'DD-MM-YYYY',
-      maxSize: '20m',
-      maxFiles: '14d'
+      level: "warn",
+      filename: "logs/warn-%DATE%.log",
+      datePattern: "DD-MM-YYYY",
+      maxSize: "20m",
+      maxFiles: "14d",
     }),
   ],
 });
