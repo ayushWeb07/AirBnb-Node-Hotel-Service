@@ -103,7 +103,7 @@ const remove = async (id: number) => {
     }
 
     throw new InternalServerError(
-      "Something went wrong while removing the hotel by id",
+      "Something went wrong while removing the hotel",
       error instanceof Error ? error.stack : undefined,
     );
   }
