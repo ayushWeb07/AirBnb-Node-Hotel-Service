@@ -1,3 +1,5 @@
+import { StatusCodes } from "http-status-codes";
+
 export interface AppError extends Error {
   statusCode: number;
 }
@@ -9,7 +11,7 @@ export class InternalServerError implements AppError {
   stack?: string;
 
   constructor(message: string, stack?: string) {
-    this.statusCode = 500;
+    this.statusCode = StatusCodes.INTERNAL_SERVER_ERROR;
     this.message = message;
     this.name = "InternalServerError";
     this.stack = stack;
@@ -23,7 +25,7 @@ export class BadRequestError implements AppError {
   stack?: string;
 
   constructor(message: string, stack?: string) {
-    this.statusCode = 400;
+    this.statusCode = StatusCodes.BAD_REQUEST;
     this.message = message;
     this.name = "BadRequestError";
     this.stack = stack;
@@ -37,7 +39,7 @@ export class UnauthorizedError implements AppError {
   stack?: string;
 
   constructor(message: string, stack?: string) {
-    this.statusCode = 401;
+    this.statusCode = StatusCodes.UNAUTHORIZED;
     this.message = message;
     this.name = "UnauthorizedError";
     this.stack = stack;
@@ -51,7 +53,7 @@ export class ForbiddenError implements AppError {
   stack?: string;
 
   constructor(message: string, stack?: string) {
-    this.statusCode = 403;
+    this.statusCode = StatusCodes.FORBIDDEN;
     this.message = message;
     this.name = "ForbiddenError";
     this.stack = stack;
@@ -65,7 +67,7 @@ export class NotFoundError implements AppError {
   stack?: string;
 
   constructor(message: string, stack?: string) {
-    this.statusCode = 404;
+    this.statusCode = StatusCodes.NOT_FOUND;
     this.message = message;
     this.name = "NotFoundError";
     this.stack = stack;
