@@ -1,10 +1,10 @@
 import { logger } from "../config/logger.config";
 import Hotel from "../db/models/hotel";
-import type { createHotel } from "../dtos/hotel.dto";
+import * as hotelDto from "../dtos/hotel.dto";
 import { InternalServerError, NotFoundError } from "../utils/errors/app.error";
 
 // create a hotel entry
-const create = async (hotelData: createHotel) => {
+const create = async (hotelData: hotelDto.create) => {
   try {
     const newHotel = await Hotel.create(hotelData);
 
@@ -64,8 +64,8 @@ const getById = async (id: number) => {
   } catch (error) {
     logger.error("Hotels: getById -> failure", error);
 
-    if(error instanceof NotFoundError) {
-        throw error
+    if (error instanceof NotFoundError) {
+      throw error;
     }
 
     throw new InternalServerError(
@@ -75,4 +75,72 @@ const getById = async (id: number) => {
   }
 };
 
-export { create, getAll, getById };
+// remove hotel entry by id
+const remove = async (id: number) => {
+  try {
+    const hotel = await Hotel.findByPk(id);
+
+    if (hotel === null) {
+      logger.error("Hotels: remove -> failure", {
+        message: "Hotel not found",
+      });
+
+      throw new NotFoundError("Hotel not found");
+    } else {
+      await hotel.destroy();
+
+      logger.info("Hotels: remove -> success: ", {
+        id: hotel.id,
+      });
+
+      return hotel;
+    }
+  } catch (error) {
+    logger.error("Hotels: remove -> failure", error);
+
+    if (error instanceof NotFoundError) {
+      throw error;
+    }
+
+    throw new InternalServerError(
+      "Something went wrong while removing the hotel by id",
+      error instanceof Error ? error.stack : undefined,
+    );
+  }
+};
+
+// update a single hotel entry
+const update = async (id: number, hotelData: hotelDto.update) => {
+  try {
+    const hotel = await Hotel.findByPk(id);
+
+    if (hotel === null) {
+      logger.error("Hotels: update -> failure", {
+        message: "Hotel not found",
+      });
+
+      throw new NotFoundError("Hotel not found");
+    } else {
+      logger.info("Hotels: update -> success: ", {
+        id: hotel.id,
+      });
+
+      await hotel.update({ ...hotelData });
+
+      return hotel;
+    }
+  } catch (error) {
+    logger.error("Hotels: update -> failure", error);
+
+    if (error instanceof NotFoundError) {
+      throw error;
+    }
+
+    throw new InternalServerError(
+      "Something went wrong while updating the hotel",
+      error instanceof Error ? error.stack : undefined,
+    );
+  }
+};
+
+export { create, getAll, getById, remove, update };

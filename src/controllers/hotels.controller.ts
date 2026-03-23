@@ -31,4 +31,24 @@ const getById = async (req: Request, res: Response) => {
   });
 };
 
-export { create, getAll, getById };
+const remove = async (req: Request, res: Response) => {
+  const hotel = await hotelService.remove(Number(req.params.id));
+
+  res.status(200).json({
+    message: "Removed the hotel successfully",
+    data: hotel,
+    success: true
+  });
+};
+
+const update = async (req: Request, res: Response) => {
+  const hotel = await hotelService.update(Number(req.params.id), req.body);
+
+  res.status(200).json({
+    message: "Updated the hotel successfully",
+    data: hotel,
+    success: true
+  });
+};
+
+export { create, getAll, getById, remove, update };

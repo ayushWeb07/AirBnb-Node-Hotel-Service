@@ -4,9 +4,22 @@ const getByIdSchema = z.object({
   id: z.coerce.number().nonnegative(),
 });
 
+const removeSchema = z.object({
+  id: z.coerce.number().nonnegative(),
+});
+
 const createSchema = z.object({
   name: z.string().min(1).max(25),
   address: z.string().min(1).max(500),
 });
 
-export { getByIdSchema, createSchema };
+const updateBodySchema = z.object({
+  name: z.string().min(1).max(25).optional(),
+  address: z.string().min(1).max(500).optional(),
+});
+
+const updateUrlParamsSchema = z.object({
+  id: z.coerce.number().nonnegative(),
+});
+
+export { getByIdSchema, createSchema, removeSchema, updateBodySchema, updateUrlParamsSchema };
