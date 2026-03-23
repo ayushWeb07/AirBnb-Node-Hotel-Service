@@ -1,9 +1,9 @@
 import { Router } from "express"
-import userRouter from "./users.router.ts"
+import hotelsRouter from "./hotels.router"
 
 const router= Router()
 
 // setup all app routes
-router.use("/users", userRouter)
+router.use("/hotels", hotelsRouter)
 
 export default router
