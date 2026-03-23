@@ -16,9 +16,9 @@ class Hotel extends Model<
   declare name: string;
   declare address: string;
 
-  declare updatedAt: CreationOptional<Date>;
   declare createdAt: CreationOptional<Date>;
-  declare deletedAt: CreationOptional<Date>;
+  declare updatedAt: CreationOptional<Date>;
+  declare deletedAt: CreationOptional<Date | null>;
 }
 
 Hotel.init(
