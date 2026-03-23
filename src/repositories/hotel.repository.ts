@@ -121,11 +121,11 @@ const update = async (id: number, hotelData: hotelDto.update) => {
 
       throw new NotFoundError("Hotel not found");
     } else {
+      await hotel.update({ ...hotelData });
+
       logger.info("Hotels: update -> success: ", {
         id: hotel.id,
       });
-
-      await hotel.update({ ...hotelData });
 
       return hotel;
     }

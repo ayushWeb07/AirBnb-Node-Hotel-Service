@@ -9,12 +9,12 @@ const removeSchema = z.object({
 });
 
 const createSchema = z.object({
-  name: z.string().min(1).max(25),
+  name: z.string().min(1).max(20),
   address: z.string().min(1).max(500),
 });
 
 const updateBodySchema = z.object({
-  name: z.string().min(1).max(25).optional(),
+  name: z.string().min(1).max(20).optional(),
   address: z.string().min(1).max(500).optional(),
 });
 
