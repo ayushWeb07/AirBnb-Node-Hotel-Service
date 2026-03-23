@@ -1,4 +1,5 @@
 import type { Request, Response, NextFunction } from "express";
+import { StatusCodes } from "http-status-codes";
 import { z, type ZodObject } from "zod";
 
 // validate the req body for a specific zod object
@@ -10,7 +11,7 @@ const validateRequestBody = (schema: ZodObject) => {
     if(result.success) {
       next();
     } else {
-      return res.status(400).json({
+      return res.status(StatusCodes.BAD_REQUEST).json({
         message: "Invalid request body",
         success: false,
         error: z.flattenError(result.error)
@@ -28,7 +29,7 @@ const validateRequestQueryParams = (schema: ZodObject) => {
     if(result.success) {
      next();
     } else {
-      return res.status(400).json({
+      return res.status(StatusCodes.BAD_REQUEST).json({
         message: "Invalid request query params",
         success: false,
         error: z.flattenError(result.error)
@@ -46,7 +47,7 @@ const validateRequestUrlParams = (schema: ZodObject) => {
     if(result.success) {
       next();
     } else {
-      return res.status(400).json({
+      return res.status(StatusCodes.BAD_REQUEST).json({
         message: "Invalid request URL params",
         success: false,
         error: z.flattenError(result.error)
