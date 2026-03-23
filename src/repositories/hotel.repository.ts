@@ -64,6 +64,10 @@ const getById = async (id: number) => {
   } catch (error) {
     logger.error("Hotels: getById -> failure", error);
 
+    if(error instanceof NotFoundError) {
+        throw error
+    }
+
     throw new InternalServerError(
       "Something went wrong while getting the hotel by id",
       error instanceof Error ? error.stack : undefined,
