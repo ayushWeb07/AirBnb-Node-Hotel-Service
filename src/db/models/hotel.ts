@@ -15,6 +15,10 @@ class Hotel extends Model<
   declare id: CreationOptional<number>;
   declare name: string;
   declare address: string;
+
+  declare createdAt: CreationOptional<Date>;
+  declare updatedAt: CreationOptional<Date>;
+  declare deletedAt: CreationOptional<Date | null>;
 }
 
 Hotel.init(
@@ -35,10 +39,29 @@ Hotel.init(
       type: DataTypes.TEXT,
       allowNull: false,
     },
+
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+    },
+
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+    },
+
+    deletedAt: {
+      type: DataTypes.DATE,
+      allowNull: true,
+      defaultValue: null,
+    },
   },
   {
     sequelize,
-    tableName: "hotels"
+    tableName: "hotels",
+    paranoid: true,
   },
 );
 
