@@ -59,29 +59,6 @@ Hotel.init(
     },
   },
   {
-    hooks: {
-
-      beforeCreate: (hotel, options) => {
-        hotel.name= hotel.name.toLowerCase()
-      },
-
-      afterCreate: (hotel, options) => {
-        console.log(`New hotel created with index: ${hotel.id}`)
-      },
-
-      beforeUpdate: (hotel, options) => {
-        hotel.name= hotel.name.toLowerCase()
-      },
-
-      afterUpdate: (hotel, options) => {
-        console.log(`Existing hotel updated with index: ${hotel.id}`)
-      },
-
-      afterDestroy: (hotel, options) => {
-        console.log(`Existing hotel deleted with index: ${hotel.id}`)
-      },
-
-    },
     sequelize,
     tableName: "hotels",
     paranoid: true,
