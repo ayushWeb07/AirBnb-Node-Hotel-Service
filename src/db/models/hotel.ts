@@ -6,7 +6,7 @@ import {
   DataTypes,
 } from "sequelize";
 
-import sequelize from "./sequelize";
+import sequelize from "./sequelize.ts";
 
 class Hotel extends Model<
   InferAttributes<Hotel>,

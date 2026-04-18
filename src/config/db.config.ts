@@ -1,4 +1,4 @@
-import { dbConfig } from "./index";
+import { dbConfig } from "./index.ts";
 
 const config = {
   development: {
