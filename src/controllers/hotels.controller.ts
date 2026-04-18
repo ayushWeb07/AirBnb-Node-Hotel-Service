@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import * as hotelService from "../services/hotel.service";
+import * as hotelService from "../services/hotel.service.ts";
 
 import {
 	StatusCodes

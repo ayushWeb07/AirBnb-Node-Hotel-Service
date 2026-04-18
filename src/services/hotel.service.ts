@@ -1,5 +1,5 @@
-import * as hotelDto from "../dtos/hotel.dto";
-import * as hotelRepository from "../repositories/hotel.repository";
+import * as hotelDto from "../dtos/hotel.dto.ts";
+import * as hotelRepository from "../repositories/hotel.repository.ts";
 
 const create = async (hotelData: hotelDto.create) => {
   const hotel = await hotelRepository.create(hotelData);

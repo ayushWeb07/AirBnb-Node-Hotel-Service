@@ -1,5 +1,5 @@
 import { Router } from "express"
-import hotelsRouter from "./hotels.router"
+import hotelsRouter from "./hotels.router.ts"
 
 const router= Router()
 

@@ -1,7 +1,7 @@
-import { logger } from "../config/logger.config";
-import Hotel from "../db/models/hotel";
-import * as hotelDto from "../dtos/hotel.dto";
-import { InternalServerError, NotFoundError } from "../utils/errors/app.error";
+import { logger } from "../config/logger.config.ts";
+import Hotel from "../db/models/hotel.ts";
+import * as hotelDto from "../dtos/hotel.dto.ts";
+import { InternalServerError, NotFoundError } from "../utils/errors/app.error.ts";
 
 // create a hotel entry
 const create = async (hotelData: hotelDto.create) => {
