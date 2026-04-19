@@ -50,6 +50,7 @@ const getById = async (id: number) => {
 
     if (hotel === null) {
       logger.error("Hotels: getById -> failure", {
+        id,
         error: "Hotel not found",
       });
 
@@ -85,6 +86,7 @@ const remove = async (id: number) => {
 
     if (hotel === null) {
       logger.error("Hotels: remove -> failure", {
+        id,
         error: "Hotel not found",
       });
 
@@ -121,6 +123,7 @@ const update = async (id: number, hotelData: hotelDto.update) => {
 
     if (hotel === null) {
       logger.error("Hotels: update -> failure", {
+        id,
         error: "Hotel not found",
       });
 
