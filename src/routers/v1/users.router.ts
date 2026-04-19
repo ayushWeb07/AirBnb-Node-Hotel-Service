@@ -4,7 +4,7 @@ import * as users from "../../controllers/users.controller.ts";
 import {
   validateRequestBody,
   validateRequestUrlParams,
-} from "../../validators/index.ts";
+} from "../../validators/request.validator.ts";
 
 import {
   createSchema,
