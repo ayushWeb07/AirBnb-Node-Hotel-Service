@@ -4,7 +4,7 @@ import * as hotelsController from "../../controllers/hotels.controller.ts";
 import {
   validateRequestBody,
   validateRequestUrlParams,
-} from "../../validators/index.ts";
+} from "../../validators/request.validator.ts";
 
 import * as hotelValidator from "../../validators/hotel.validator.ts";
 
