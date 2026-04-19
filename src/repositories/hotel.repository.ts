@@ -28,7 +28,7 @@ const getAll = async () => {
   try {
     const hotels = await Hotel.findAll();
 
-    logger.info("Hotels: getAll -> success: ", {
+    logger.info("Hotels: getAll -> success", {
       count: hotels.length,
     });
 
@@ -50,28 +50,32 @@ const getById = async (id: number) => {
 
     if (hotel === null) {
       logger.error("Hotels: getById -> failure", {
-        message: "Hotel not found",
+        id,
+        error: "Hotel not found",
       });
 
       throw new NotFoundError("Hotel not found");
     } else {
-      logger.info("Hotels: getById -> success: ", {
+      logger.info("Hotels: getById -> success", {
         id: hotel.id,
       });
 
       return hotel;
     }
   } catch (error) {
-    logger.error("Hotels: getById -> failure", error);
 
     if (error instanceof NotFoundError) {
       throw error;
     }
 
-    throw new InternalServerError(
-      "Something went wrong while getting the hotel by id",
-      error instanceof Error ? error.stack : undefined,
-    );
+    else {
+      logger.error("Hotels: getById -> failure", error);
+
+      throw new InternalServerError(
+          "Something went wrong while getting the hotel by id",
+          error instanceof Error ? error.stack : undefined,
+      );
+    }
   }
 };
 
@@ -82,30 +86,33 @@ const remove = async (id: number) => {
 
     if (hotel === null) {
       logger.error("Hotels: remove -> failure", {
-        message: "Hotel not found",
+        id,
+        error: "Hotel not found",
       });
 
       throw new NotFoundError("Hotel not found");
     } else {
       await hotel.destroy();
 
-      logger.info("Hotels: remove -> success: ", {
+      logger.info("Hotels: remove -> success", {
         id: hotel.id,
       });
 
       return hotel;
     }
   } catch (error) {
-    logger.error("Hotels: remove -> failure", error);
-
     if (error instanceof NotFoundError) {
       throw error;
     }
 
-    throw new InternalServerError(
-      "Something went wrong while removing the hotel",
-      error instanceof Error ? error.stack : undefined,
-    );
+    else {
+      logger.error("Hotels: remove -> failure", error);
+
+      throw new InternalServerError(
+          "Something went wrong while removing the hotel",
+          error instanceof Error ? error.stack : undefined,
+      );
+    }
   }
 };
 
@@ -116,30 +123,33 @@ const update = async (id: number, hotelData: hotelDto.update) => {
 
     if (hotel === null) {
       logger.error("Hotels: update -> failure", {
-        message: "Hotel not found",
+        id,
+        error: "Hotel not found",
       });
 
       throw new NotFoundError("Hotel not found");
     } else {
       await hotel.update({ ...hotelData });
 
-      logger.info("Hotels: update -> success: ", {
+      logger.info("Hotels: update -> success", {
         id: hotel.id,
       });
 
       return hotel;
     }
   } catch (error) {
-    logger.error("Hotels: update -> failure", error);
-
     if (error instanceof NotFoundError) {
       throw error;
     }
 
-    throw new InternalServerError(
-      "Something went wrong while updating the hotel",
-      error instanceof Error ? error.stack : undefined,
-    );
+    else {
+      logger.error("Hotels: update -> failure", error);
+
+      throw new InternalServerError(
+          "Something went wrong while updating the hotel",
+          error instanceof Error ? error.stack : undefined,
+      );
+    }
   }
 };
 
