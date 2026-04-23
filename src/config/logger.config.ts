@@ -1,7 +1,15 @@
 import winston from "winston";
 import DailyRotateFile from "winston-daily-rotate-file";
-
+import { Logtail } from "@logtail/node";
+import { LogtailTransport } from "@logtail/winston";
 import { getCorrelationId } from "../utils/helpers/request.helper.ts";
+import { serverConfig } from "./index.ts";
+
+
+// Create a Logtail client
+const logtail = new Logtail(serverConfig.LOGTAIL_SOURCE_TOKEN, {
+  endpoint: serverConfig.LOGTAIL_URL,
+});
 
 const logger = winston.createLogger({
   format: winston.format.combine(
@@ -35,6 +43,8 @@ const logger = winston.createLogger({
   ),
 
   transports: [
+    new LogtailTransport(logtail),
+
     new winston.transports.Console(),
 
     // info + warn + error
@@ -66,4 +76,4 @@ const logger = winston.createLogger({
   ],
 });
 
-export { logger };
+export { logtail, logger };

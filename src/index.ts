@@ -1,10 +1,10 @@
 import express from "express"
-import { serverConfig } from "./config/index.ts"
 import v1Router from "./routers/v1/index.router.ts"
 import { errorHandler } from "./middlewares/error.middleware.ts"
 import { attachCorrelationId } from "./middlewares/correlation.middleware.ts"
-import { logger } from "./config/logger.config.ts"
-import sequelize from "./db/models/sequelize.ts"
+import { startServer } from "./utils/server/startServer.ts";
+import { sendHeartBeatPings } from "./utils/server/sendHeartBeatPings.ts";
+import { registerShutdownHandlers } from "./config/shutdown.config.ts";
 
 // config app
 const app = express()
@@ -20,18 +20,10 @@ app.use("/api/v1", v1Router)
 app.use(errorHandler)
 
 // spin up the server + DB
-const startServer = async () => {
-  try {
-    await sequelize.authenticate();
-    logger.info("Successfully connected to the DB");
+startServer(app);
 
-    app.listen(serverConfig.PORT, () => {
-      logger.info(`Server listening on http://localhost:${serverConfig.PORT}`);
-    });
-  } catch (error) {
-    logger.error("Unable to connect to the database:", error);
-    process.exit(1);
-  }
-};
+// send heartbeat pings with 5m interval
+setInterval(sendHeartBeatPings, 5 * 60 * 1000);
 
-startServer();
+// Ensure that all logs are sent to Logtail
+registerShutdownHandlers()
