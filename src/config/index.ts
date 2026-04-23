@@ -5,6 +5,7 @@ interface ServerConfig {
   BETTERSTACK_HEARTBEAT_URL: string;
   LOGTAIL_SOURCE_TOKEN: string;
   LOGTAIL_URL: string;
+  SENTRY_DSN: string;
 }
 
 interface DbConfig {
@@ -19,6 +20,7 @@ const serverConfig: ServerConfig = {
   BETTERSTACK_HEARTBEAT_URL: process.env.BETTERSTACK_HEARTBEAT_URL || "",
   LOGTAIL_SOURCE_TOKEN: process.env.LOGTAIL_SOURCE_TOKEN || "",
   LOGTAIL_URL: process.env.LOGTAIL_URL || "",
+  SENTRY_DSN: process.env.SENTRY_DSN || "",
 };
 
 const dbConfig: DbConfig = {

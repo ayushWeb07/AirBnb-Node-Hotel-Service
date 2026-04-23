@@ -62,8 +62,8 @@ process.on('SIGINT', async () => {
 });
 
 // Uncaught errors
-process.on('uncaughtException', async (err) => {
-  logger.error('Uncaught exception', { error: err });
+process.on('uncaughtException', async (error) => {
+  logger.error('Uncaught exception', { error: error });
   await logtail.flush();
   process.exit(1);
 });
