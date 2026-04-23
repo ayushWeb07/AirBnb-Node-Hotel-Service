@@ -2,6 +2,7 @@ import "dotenv/config";
 
 interface ServerConfig {
   PORT: number;
+  BETTERSTACK_HEARTBEAT_URL: string;
 }
 
 interface DbConfig {
@@ -13,6 +14,7 @@ interface DbConfig {
 
 const serverConfig: ServerConfig = {
   PORT: Number(process.env.PORT) || 3000,
+  BETTERSTACK_HEARTBEAT_URL: process.env.BETTERSTACK_HEARTBEAT_URL || "",
 };
 
 const dbConfig: DbConfig = {

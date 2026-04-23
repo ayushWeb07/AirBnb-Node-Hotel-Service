@@ -34,4 +34,16 @@ const startServer = async () => {
   }
 };
 
+// send heartbeat pings to betterstack with 5m time period
+const sendHeartBeatPings = async () => {
+  try {
+    await fetch(serverConfig.BETTERSTACK_HEARTBEAT_URL)
+    logger.info("Successfully pinged the heartbeat")
+  } catch (error) {
+    logger.error("Failed to ping the heartbeat", error);
+  }
+}
+
 startServer();
+
+setInterval(sendHeartBeatPings, 5 * 60 * 1000);
