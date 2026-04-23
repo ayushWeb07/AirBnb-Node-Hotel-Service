@@ -3,7 +3,7 @@ import { serverConfig } from "./config/index.ts"
 import v1Router from "./routers/v1/index.router.ts"
 import { errorHandler } from "./middlewares/error.middleware.ts"
 import { attachCorrelationId } from "./middlewares/correlation.middleware.ts"
-import { logger } from "./config/logger.config.ts"
+import { logtail, logger } from "./config/logger.config.ts"
 import sequelize from "./db/models/sequelize.ts"
 
 // config app
@@ -47,3 +47,29 @@ const sendHeartBeatPings = async () => {
 startServer();
 
 setInterval(sendHeartBeatPings, 5 * 60 * 1000);
+
+// Ensure that all logs are sent to Logtail
+
+// Graceful shutdown
+process.on('SIGTERM', async () => {
+  await logtail.flush();
+  process.exit(0);
+});
+
+process.on('SIGINT', async () => {
+  await logtail.flush();
+  process.exit(0);
+});
+
+// Uncaught errors
+process.on('uncaughtException', async (err) => {
+  logger.error('Uncaught exception', { error: err });
+  await logtail.flush();
+  process.exit(1);
+});
+
+process.on('unhandledRejection', async (reason) => {
+  logger.error('Unhandled rejection', { error: reason });
+  await logtail.flush();
+  process.exit(1);
+});
