@@ -1,68 +1,68 @@
 import {
-  Model,
-  InferAttributes,
-  InferCreationAttributes,
-  CreationOptional,
-  DataTypes,
+	Model,
+	InferAttributes,
+	InferCreationAttributes,
+	CreationOptional,
+	DataTypes,
 } from "sequelize";
 
 import sequelize from "./sequelize.ts";
 
 class Hotel extends Model<
-  InferAttributes<Hotel>,
-  InferCreationAttributes<Hotel>
+	InferAttributes<Hotel>,
+	InferCreationAttributes<Hotel>
 > {
-  declare id: CreationOptional<number>;
-  declare name: string;
-  declare address: string;
+	declare id: CreationOptional<number>;
+	declare name: string;
+	declare address: string;
 
-  declare createdAt: CreationOptional<Date>;
-  declare updatedAt: CreationOptional<Date>;
-  declare deletedAt: CreationOptional<Date | null>;
+	declare createdAt: CreationOptional<Date>;
+	declare updatedAt: CreationOptional<Date>;
+	declare deletedAt: CreationOptional<Date | null>;
 }
 
 Hotel.init(
-  {
-    id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
-      allowNull: false,
-    },
+	{
+		id: {
+			type: DataTypes.INTEGER,
+			primaryKey: true,
+			autoIncrement: true,
+			allowNull: false,
+		},
 
-    name: {
-      type: DataTypes.STRING(20),
-      allowNull: false,
-    },
+		name: {
+			type: DataTypes.STRING(20),
+			allowNull: false,
+		},
 
-    address: {
-      type: DataTypes.TEXT,
-      allowNull: false,
-    },
+		address: {
+			type: DataTypes.TEXT,
+			allowNull: false,
+		},
 
-    createdAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: DataTypes.NOW,
-    },
+		createdAt: {
+			type: DataTypes.DATE,
+			allowNull: false,
+			defaultValue: DataTypes.NOW,
+		},
 
-    updatedAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: DataTypes.NOW,
-    },
+		updatedAt: {
+			type: DataTypes.DATE,
+			allowNull: false,
+			defaultValue: DataTypes.NOW,
+		},
 
-    deletedAt: {
-      type: DataTypes.DATE,
-      allowNull: true,
-      defaultValue: null,
-    },
-  },
-  {
-    sequelize,
-    tableName: "hotels",
-    paranoid: true,
-  },
+		deletedAt: {
+			type: DataTypes.DATE,
+			allowNull: true,
+			defaultValue: null,
+		},
+	},
+	{
+		sequelize,
+		tableName: "hotels",
+		paranoid: true,
+	},
 );
 
 export default Hotel;

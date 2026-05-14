@@ -1,41 +1,39 @@
 import type { Request, Response } from "express";
 import { logger } from "../config/logger.config.ts";
 
-import {
-	StatusCodes
-} from 'http-status-codes';
+import { StatusCodes } from "http-status-codes";
 
 const getMany = (req: Request, res: Response): void => {
-  res.status(StatusCodes.OK).json(`Get Many Users`);
+	res.status(StatusCodes.OK).json(`Get Many Users`);
 
-  logger.info("Information", {
-    userId: 10,
-    postId: 5,
-  });
+	logger.info("Information", {
+		userId: 10,
+		postId: 5,
+	});
 
-  logger.error("Error", {
-    commentId: 10,
-  });
+	logger.error("Error", {
+		commentId: 10,
+	});
 
-  logger.warn("Warning", {
-    videoId: 2,
-  });
+	logger.warn("Warning", {
+		videoId: 2,
+	});
 };
 
 const getOne = (req: Request, res: Response): void => {
-  res.status(StatusCodes.OK).json(`Get One User`);
+	res.status(StatusCodes.OK).json(`Get One User`);
 };
 
 const create = (req: Request, res: Response): void => {
-  res.status(StatusCodes.OK).json(`Create One User`);
+	res.status(StatusCodes.OK).json(`Create One User`);
 };
 
 const update = (req: Request, res: Response): void => {
-  res.status(StatusCodes.OK).json(`Update One User`);
+	res.status(StatusCodes.OK).json(`Update One User`);
 };
 
 const remove = (req: Request, res: Response): void => {
-  res.status(StatusCodes.OK).json(`Remove User`);
+	res.status(StatusCodes.OK).json(`Remove User`);
 };
 
 export { getMany, getOne, create, update, remove };

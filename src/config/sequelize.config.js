@@ -1,4 +1,4 @@
 require("ts-node/register");
-const dbConfig= require("./db.config")
+const dbConfig = require("./db.config");
 
-module.exports = dbConfig
+module.exports = dbConfig;
