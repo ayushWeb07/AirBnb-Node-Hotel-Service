@@ -8,20 +8,28 @@ import {
 
 import sequelize from "./sequelize.ts";
 
-class Hotel extends Model<
-	InferAttributes<Hotel>,
-	InferCreationAttributes<Hotel>
+enum EType {
+	SIGLE = "single",
+	DOUBLE = "double",
+	KING = "king",
+	QUEEN = "queen",
+}
+
+class RoomType extends Model<
+	InferAttributes<RoomType>,
+	InferCreationAttributes<RoomType>
 > {
 	declare id: CreationOptional<number>;
-	declare name: string;
-	declare address: string;
+	declare roomCount: number;
+	declare hotelId: number;
+	declare type: EType;
 
 	declare createdAt: CreationOptional<Date>;
 	declare updatedAt: CreationOptional<Date>;
 	declare deletedAt: CreationOptional<Date | null>;
 }
 
-Hotel.init(
+RoomType.init(
 	{
 		id: {
 			type: DataTypes.INTEGER,
@@ -29,29 +37,34 @@ Hotel.init(
 			autoIncrement: true,
 			allowNull: false,
 		},
-
-		name: {
-			type: DataTypes.STRING(20),
+		roomCount: {
+			type: DataTypes.INTEGER,
+			allowNull: false,
+			defaultValue: 0,
+		},
+		type: {
+			type: DataTypes.ENUM("single", "double", "king", "queen"),
+			defaultValue: "single",
 			allowNull: false,
 		},
-
-		address: {
-			type: DataTypes.TEXT,
+		hotelId: {
+			type: DataTypes.INTEGER,
+			references: {
+				model: "hotels",
+				key: "id",
+			},
 			allowNull: false,
 		},
-
 		createdAt: {
 			type: DataTypes.DATE,
 			allowNull: false,
 			defaultValue: DataTypes.NOW,
 		},
-
 		updatedAt: {
 			type: DataTypes.DATE,
 			allowNull: false,
 			defaultValue: DataTypes.NOW,
 		},
-
 		deletedAt: {
 			type: DataTypes.DATE,
 			allowNull: true,
@@ -60,9 +73,9 @@ Hotel.init(
 	},
 	{
 		sequelize,
-		tableName: "hotels",
+		tableName: "roomType",
 		paranoid: true,
 	},
 );
 
-export default Hotel;
+export default RoomType;

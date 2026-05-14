@@ -8,20 +8,21 @@ import {
 
 import sequelize from "./sequelize.ts";
 
-class Hotel extends Model<
-	InferAttributes<Hotel>,
-	InferCreationAttributes<Hotel>
-> {
+class Room extends Model<InferAttributes<Room>, InferCreationAttributes<Room>> {
 	declare id: CreationOptional<number>;
-	declare name: string;
-	declare address: string;
+	declare number: number;
+	declare price: number;
+	declare roomTypeId: number;
+	declare bookingId: number | null;
+	declare hotelId: number;
 
+	declare availableOn: Date;
 	declare createdAt: CreationOptional<Date>;
 	declare updatedAt: CreationOptional<Date>;
 	declare deletedAt: CreationOptional<Date | null>;
 }
 
-Hotel.init(
+Room.init(
 	{
 		id: {
 			type: DataTypes.INTEGER,
@@ -29,29 +30,50 @@ Hotel.init(
 			autoIncrement: true,
 			allowNull: false,
 		},
-
-		name: {
-			type: DataTypes.STRING(20),
+		number: {
+			type: DataTypes.INTEGER,
+			allowNull: false,
+			defaultValue: 0,
+		},
+		price: {
+			type: DataTypes.INTEGER,
+			allowNull: false,
+			defaultValue: 0,
+		},
+		roomTypeId: {
+			type: DataTypes.INTEGER,
+			references: {
+				model: "roomType",
+				key: "id",
+			},
 			allowNull: false,
 		},
-
-		address: {
-			type: DataTypes.TEXT,
+		bookingId: {
+			type: DataTypes.INTEGER,
+			allowNull: true,
+		},
+		hotelId: {
+			type: DataTypes.INTEGER,
+			references: {
+				model: "hotels",
+				key: "id",
+			},
 			allowNull: false,
 		},
-
+		availableOn: {
+			type: DataTypes.DATE,
+			allowNull: false,
+		},
 		createdAt: {
 			type: DataTypes.DATE,
 			allowNull: false,
 			defaultValue: DataTypes.NOW,
 		},
-
 		updatedAt: {
 			type: DataTypes.DATE,
 			allowNull: false,
 			defaultValue: DataTypes.NOW,
 		},
-
 		deletedAt: {
 			type: DataTypes.DATE,
 			allowNull: true,
@@ -60,9 +82,9 @@ Hotel.init(
 	},
 	{
 		sequelize,
-		tableName: "hotels",
+		tableName: "rooms",
 		paranoid: true,
 	},
 );
 
-export default Hotel;
+export default Room;
