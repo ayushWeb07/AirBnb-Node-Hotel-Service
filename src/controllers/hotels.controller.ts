@@ -53,4 +53,10 @@ const updateHotel = async (req: Request, res: Response) => {
 	});
 };
 
-export { createHotel, getAllHotels, getHotelById, removeHotelById, updateHotel};
+export {
+	createHotel,
+	getAllHotels,
+	getHotelById,
+	removeHotelById,
+	updateHotel,
+};

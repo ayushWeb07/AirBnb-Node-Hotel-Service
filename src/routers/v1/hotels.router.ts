@@ -10,27 +10,27 @@ import * as hotelValidator from "../../validators/hotel.validator.ts";
 
 const router = Router();
 
-router.get("/", hotelsController.getAll);
+router.get("/", hotelsController.getAllHotels);
 router.get(
 	"/:id",
 	validateRequestUrlParams(hotelValidator.getByIdSchema),
-	hotelsController.getById,
+	hotelsController.getHotelById,
 );
 router.post(
 	"/",
 	validateRequestBody(hotelValidator.createSchema),
-	hotelsController.create,
+	hotelsController.createHotel,
 );
 router.delete(
 	"/:id",
 	validateRequestUrlParams(hotelValidator.removeSchema),
-	hotelsController.remove,
+	hotelsController.removeHotelById,
 );
 router.patch(
 	"/:id",
 	validateRequestUrlParams(hotelValidator.updateUrlParamsSchema),
 	validateRequestBody(hotelValidator.updateBodySchema),
-	hotelsController.update,
+	hotelsController.updateHotel,
 );
 
 export default router;
