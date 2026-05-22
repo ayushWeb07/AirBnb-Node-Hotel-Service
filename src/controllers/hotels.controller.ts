@@ -3,8 +3,8 @@ import * as hotelService from "../services/hotel.service.ts";
 
 import { StatusCodes } from "http-status-codes";
 
-const create = async (req: Request, res: Response) => {
-	const hotel = await hotelService.create(req.body);
+const createHotel = async (req: Request, res: Response) => {
+	const hotel = await hotelService.createHotel(req.body);
 
 	res.status(StatusCodes.CREATED).json({
 		message: "New hotel was added successfully",
@@ -13,8 +13,8 @@ const create = async (req: Request, res: Response) => {
 	});
 };
 
-const getAll = async (req: Request, res: Response) => {
-	const hotels = await hotelService.getAll();
+const getAllHotels = async (req: Request, res: Response) => {
+	const hotels = await hotelService.getAllHotels();
 
 	res.status(StatusCodes.OK).json({
 		message: "Fetched all the hotels successfully",
@@ -23,8 +23,8 @@ const getAll = async (req: Request, res: Response) => {
 	});
 };
 
-const getById = async (req: Request, res: Response) => {
-	const hotel = await hotelService.getById(Number(req.params.id));
+const getHotelById = async (req: Request, res: Response) => {
+	const hotel = await hotelService.getHotelById(Number(req.params.id));
 
 	res.status(StatusCodes.OK).json({
 		message: "Fetched the hotel successfully",
@@ -33,8 +33,8 @@ const getById = async (req: Request, res: Response) => {
 	});
 };
 
-const remove = async (req: Request, res: Response) => {
-	const hotel = await hotelService.remove(Number(req.params.id));
+const removeHotelById = async (req: Request, res: Response) => {
+	const hotel = await hotelService.removeHotelById(Number(req.params.id));
 
 	res.status(StatusCodes.OK).json({
 		message: "Removed the hotel successfully",
@@ -43,8 +43,8 @@ const remove = async (req: Request, res: Response) => {
 	});
 };
 
-const update = async (req: Request, res: Response) => {
-	const hotel = await hotelService.update(Number(req.params.id), req.body);
+const updateHotel = async (req: Request, res: Response) => {
+	const hotel = await hotelService.updateHotel(Number(req.params.id), req.body);
 
 	res.status(StatusCodes.OK).json({
 		message: "Updated the hotel successfully",
@@ -53,4 +53,10 @@ const update = async (req: Request, res: Response) => {
 	});
 };
 
-export { create, getAll, getById, remove, update };
+export {
+	createHotel,
+	getAllHotels,
+	getHotelById,
+	removeHotelById,
+	updateHotel,
+};
