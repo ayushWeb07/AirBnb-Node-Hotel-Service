@@ -7,7 +7,7 @@ import {
 } from "../utils/errors/app.error.ts";
 
 // create a hotel entry
-const create = async (hotelData: hotelDto.create) => {
+const createHotel = async (hotelData: hotelDto.create) => {
 	try {
 		const newHotel = await Hotel.create(hotelData);
 
@@ -27,7 +27,7 @@ const create = async (hotelData: hotelDto.create) => {
 };
 
 // get all hotel entries
-const getAll = async () => {
+const getAllHotels = async () => {
 	try {
 		const hotels = await Hotel.findAll();
 
@@ -47,7 +47,7 @@ const getAll = async () => {
 };
 
 // get a single hotel entry by id
-const getById = async (id: number) => {
+const getHotelById = async (id: number) => {
 	try {
 		const hotel = await Hotel.findByPk(id);
 
@@ -80,7 +80,7 @@ const getById = async (id: number) => {
 };
 
 // remove hotel entry by id
-const remove = async (id: number) => {
+const removeHotelById = async (id: number) => {
 	try {
 		const hotel = await Hotel.findByPk(id);
 
@@ -115,7 +115,7 @@ const remove = async (id: number) => {
 };
 
 // update a single hotel entry
-const update = async (id: number, hotelData: hotelDto.update) => {
+const updateHotel = async (id: number, hotelData: hotelDto.update) => {
 	try {
 		const hotel = await Hotel.findByPk(id);
 
@@ -149,4 +149,10 @@ const update = async (id: number, hotelData: hotelDto.update) => {
 	}
 };
 
-export { create, getAll, getById, remove, update };
+export {
+	createHotel,
+	getAllHotels,
+	getHotelById,
+	removeHotelById,
+	updateHotel,
+};
