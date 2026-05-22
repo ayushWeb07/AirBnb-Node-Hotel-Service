@@ -8,7 +8,7 @@ import {
 
 import sequelize from "./sequelize.ts";
 
-enum EType {
+export enum EType {
 	SIGLE = "single",
 	DOUBLE = "double",
 	KING = "king",
