@@ -1,29 +1,35 @@
 import * as hotelDto from "../dtos/hotel.dto.ts";
 import * as hotelRepository from "../repositories/hotel.repository.ts";
 
-const create = async (hotelData: hotelDto.create) => {
-	const hotel = await hotelRepository.create(hotelData);
+const createHotel = async (hotelData: hotelDto.create) => {
+	const hotel = await hotelRepository.createHotel(hotelData);
 	return hotel;
 };
 
-const getAll = async () => {
-	const hotels = await hotelRepository.getAll();
+const getAllHotels = async () => {
+	const hotels = await hotelRepository.getAllHotels();
 	return hotels;
 };
 
-const getById = async (id: number) => {
-	const hotel = await hotelRepository.getById(id);
+const getHotelById = async (id: number) => {
+	const hotel = await hotelRepository.getHotelById(id);
 	return hotel;
 };
 
-const remove = async (id: number) => {
-	const hotel = await hotelRepository.remove(id);
+const removeHotelById = async (id: number) => {
+	const hotel = await hotelRepository.removeHotelById(id);
 	return hotel;
 };
 
-const update = async (id: number, hotelData: hotelDto.update) => {
-	const hotel = await hotelRepository.update(id, hotelData);
+const updateHotel = async (id: number, hotelData: hotelDto.update) => {
+	const hotel = await hotelRepository.updateHotel(id, hotelData);
 	return hotel;
 };
 
-export { create, getAll, getById, remove, update };
+export {
+	createHotel,
+	getAllHotels,
+	getHotelById,
+	removeHotelById,
+	updateHotel,
+};
