@@ -1,6 +1,7 @@
 import { logger } from "../config/logger.config.ts";
 import RoomType from "../db/models/roomType.ts";
 import * as roomTypeDto from "../dtos/roomType.dto.ts";
+import * as hotelRepository from "./hotel.repository.ts";
 import {
 	InternalServerError,
 	NotFoundError,
@@ -26,10 +27,17 @@ const createRoomType = async (roomTypeData: roomTypeDto.createRoomType) => {
 	}
 };
 
-// get all room type entries
-const getAllRoomTypes = async () => {
+// get all room type entries of a specific hotel
+const getAllRoomTypesByHotelId = async (hotelId: number) => {
 	try {
-		const roomTypes = await RoomType.findAll();
+		// check if the hotel even exists
+		await hotelRepository.getHotelById(hotelId);
+
+		const roomTypes = await RoomType.findAll({
+			where: {
+				hotelId,
+			},
+		});
 
 		logger.info("RoomTypes: getAll -> success", {
 			count: roomTypes.length,
@@ -154,7 +162,7 @@ const updateRoomType = async (
 
 export {
 	createRoomType,
-	getAllRoomTypes,
+	getAllRoomTypesByHotelId,
 	getRoomTypeById,
 	removeRoomTypeById,
 	updateRoomType,

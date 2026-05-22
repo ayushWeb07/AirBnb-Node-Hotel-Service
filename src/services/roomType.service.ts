@@ -6,8 +6,8 @@ const createRoomType = async (roomTypeData: roomTypeDto.createRoomType) => {
 	return roomType;
 };
 
-const getAllRoomTypes = async () => {
-	const roomTypes = await roomTypeRepository.getAllRoomTypes();
+const getAllRoomTypesByHotelId = async (hotelId: number) => {
+	const roomTypes = await roomTypeRepository.getAllRoomTypesByHotelId(hotelId);
 	return roomTypes;
 };
 
@@ -31,7 +31,7 @@ const updateRoomType = async (
 
 export {
 	createRoomType,
-	getAllRoomTypes,
+	getAllRoomTypesByHotelId,
 	getRoomTypeById,
 	removeRoomTypeById,
 	updateRoomType,
