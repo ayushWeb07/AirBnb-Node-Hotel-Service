@@ -1,7 +1,7 @@
 import * as hotelDto from "../dtos/hotel.dto.ts";
 import * as hotelRepository from "../repositories/hotel.repository.ts";
 
-const createHotel = async (hotelData: hotelDto.create) => {
+const createHotel = async (hotelData: hotelDto.createHotel) => {
 	const hotel = await hotelRepository.createHotel(hotelData);
 	return hotel;
 };
@@ -21,7 +21,7 @@ const removeHotelById = async (id: number) => {
 	return hotel;
 };
 
-const updateHotel = async (id: number, hotelData: hotelDto.update) => {
+const updateHotel = async (id: number, hotelData: hotelDto.updateHotel) => {
 	const hotel = await hotelRepository.updateHotel(id, hotelData);
 	return hotel;
 };

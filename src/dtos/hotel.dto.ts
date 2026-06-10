@@ -1,11 +1,11 @@
-interface create {
+interface createHotel {
 	name: string;
 	address: string;
 }
 
-interface update {
+interface updateHotel {
 	name?: string;
 	address?: string;
 }
 
-export { create, update };
+export { createHotel, updateHotel };

@@ -7,7 +7,7 @@ import {
 } from "../utils/errors/app.error.ts";
 
 // create a hotel entry
-const createHotel = async (hotelData: hotelDto.create) => {
+const createHotel = async (hotelData: hotelDto.createHotel) => {
 	try {
 		const newHotel = await Hotel.create(hotelData);
 
@@ -115,7 +115,7 @@ const removeHotelById = async (id: number) => {
 };
 
 // update a single hotel entry
-const updateHotel = async (id: number, hotelData: hotelDto.update) => {
+const updateHotel = async (id: number, hotelData: hotelDto.updateHotel) => {
 	try {
 		const hotel = await Hotel.findByPk(id);
 
