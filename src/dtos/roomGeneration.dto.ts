@@ -1,4 +1,4 @@
-interface roomGenerationJob {
+interface roomGenerationJobDto {
 	roomTypeId: number;
 	price: number;
 	startDate: string;
@@ -6,7 +6,7 @@ interface roomGenerationJob {
 	batchNumber: number;
 }
 
-interface roomGenerationJobResponse {
+interface roomGenerationJobResponseDto {
 	totalRoomsCreated: number;
 	totalDatesProccessed: number;
 	success: boolean;
