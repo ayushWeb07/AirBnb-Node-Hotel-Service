@@ -1,9 +1,7 @@
 import { Router } from "express";
 import * as roomGenerationController from "../../controllers/roomGeneration.controller.ts";
 
-import {
-	validateRequestBody,
-} from "../../validators/request.validator.ts";
+import { validateRequestBody } from "../../validators/request.validator.ts";
 
 import * as roomGenerationValidator from "../../validators/roomGeneration.validator.ts";
 

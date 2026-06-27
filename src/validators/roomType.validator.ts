@@ -5,7 +5,7 @@ const getByIdSchema = z.object({
 });
 
 const getAllByHotelIdSchema = z.object({
-	hotelId: z.coerce.number().nonnegative(),
+	id: z.coerce.number().nonnegative(),
 });
 
 const removeSchema = z.object({

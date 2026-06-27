@@ -1,7 +1,22 @@
 import * as roomTypeDto from "../dtos/roomType.dto.ts";
 import * as roomTypeRepository from "../repositories/roomType.repository.ts";
+import * as hotelRepository from "../repositories/hotel.repository.ts";
+import { logger } from "../config/logger.config.ts";
+import {NotFoundError} from "../utils/errors/app.error.ts";
 
 const createRoomType = async (roomTypeData: roomTypeDto.createRoomType) => {
+	// check if hotel exists
+	const hotel = await hotelRepository.getHotelById(roomTypeData.hotelId);
+
+	if (hotel === null) {
+		logger.error("RoomTypes: createRoomType -> failure", {
+			hotelId: roomTypeData.hotelId,
+			error: "Hotel not found",
+		});
+
+		throw new NotFoundError("Hotel not found");
+	}
+
 	const roomType = await roomTypeRepository.createRoomType(roomTypeData);
 	return roomType;
 };
