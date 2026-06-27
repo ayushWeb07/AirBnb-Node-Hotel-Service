@@ -6,24 +6,54 @@ import {
 	NotFoundError,
 } from "../utils/errors/app.error.ts";
 import { Op } from "sequelize";
+import Hotel from "../db/models/hotel.ts";
+import RoomType from "../db/models/roomType.ts";
 
 // create a room entry
 const createRoom = async (roomData: roomDto.createRoom) => {
 	try {
+		// check if the hotel even exists
+		const hotel = await Hotel.findByPk(roomData.hotelId);
+
+		if (hotel === null) {
+			logger.error("Rooms: createRoom -> failure", {
+				hotelId: roomData.hotelId,
+				error: "Hotel not found",
+			});
+
+			throw new NotFoundError("Hotel not found");
+		}
+
+		// check if the room type even exists
+		const roomType = await RoomType.findByPk(roomData.roomTypeId);
+
+		if (roomType === null) {
+			logger.error("Rooms: createRoom -> failure", {
+				roomTypeId: roomData.roomTypeId,
+				error: "Room type not found",
+			});
+
+			throw new NotFoundError("Room type not found");
+		}
+
 		const newRoom = await Room.create(roomData);
 
-		logger.info("Rooms: create -> success", {
+		logger.info("Rooms: createRoom -> success", {
 			id: newRoom.id,
 		});
 
 		return newRoom;
 	} catch (error) {
-		logger.error("Rooms: create -> failure", error);
+		if (error instanceof NotFoundError) {
+			throw error;
+		} else {
+			logger.error("Rooms: createRoom -> failure", error);
 
-		throw new InternalServerError(
-			"Something went wrong while adding the room",
-			error instanceof Error ? error.stack : undefined,
-		);
+			throw new InternalServerError(
+				"Something went wrong while adding the room",
+				error instanceof Error ? error.stack : undefined,
+			);
+		}
 	}
 };
 
@@ -52,13 +82,13 @@ const getAllRooms = async () => {
 	try {
 		const rooms = await Room.findAll();
 
-		logger.info("Rooms: getAll -> success", {
+		logger.info("Rooms: getAllRooms -> success", {
 			count: rooms.length,
 		});
 
 		return rooms;
 	} catch (error) {
-		logger.error("Rooms: getAll -> failure", error);
+		logger.error("Rooms: getAllRooms -> failure", error);
 
 		throw new InternalServerError(
 			"Something went wrong while getting all the rooms",
@@ -73,14 +103,14 @@ const getRoomById = async (id: number) => {
 		const room = await Room.findByPk(id);
 
 		if (room === null) {
-			logger.error("Rooms: getById -> failure", {
+			logger.error("Rooms: getRoomById -> failure", {
 				id,
 				error: "Room not found",
 			});
 
 			throw new NotFoundError("Room not found");
 		} else {
-			logger.info("Rooms: getById -> success", {
+			logger.info("Rooms: getRoomById -> success", {
 				id: room.id,
 			});
 
@@ -90,7 +120,7 @@ const getRoomById = async (id: number) => {
 		if (error instanceof NotFoundError) {
 			throw error;
 		} else {
-			logger.error("Rooms: getById -> failure", error);
+			logger.error("Rooms: getRoomById -> failure", error);
 
 			throw new InternalServerError(
 				"Something went wrong while getting the room by id",
@@ -100,11 +130,23 @@ const getRoomById = async (id: number) => {
 	}
 };
 
-// get a single room entry by id
+// get rooms by room type id and available date range
 const getRoomsByRoomTypeIdAndAvailableDateRange = async (
 	roomData: roomDto.getRoomsByRoomTypeIdAndAvailableDateRange,
 ) => {
 	try {
+		// check if the room type even exists
+		const roomType = await RoomType.findByPk(roomData.roomTypeId);
+
+		if (roomType === null) {
+			logger.error("Rooms: getRoomsByRoomTypeIdAndAvailableDateRange -> failure", {
+				roomTypeId: roomData.roomTypeId,
+				error: "Room type not found",
+			});
+
+			throw new NotFoundError("Room type not found");
+		}
+
 		const rooms = await Room.findAll({
 			where: {
 				roomTypeId: roomData.roomTypeId,
@@ -121,15 +163,19 @@ const getRoomsByRoomTypeIdAndAvailableDateRange = async (
 
 		return rooms;
 	} catch (error) {
-		logger.error(
-			"Rooms: getRoomsByRoomTypeIdAndAvailableDateRange -> failure",
-			error,
-		);
+		if (error instanceof NotFoundError) {
+			throw error;
+		} else {
+			logger.error(
+				"Rooms: getRoomsByRoomTypeIdAndAvailableDateRange -> failure",
+				error,
+			);
 
-		throw new InternalServerError(
-			"Something went wrong while getting all the rooms",
-			error instanceof Error ? error.stack : undefined,
-		);
+			throw new InternalServerError(
+				"Something went wrong while getting all the rooms",
+				error instanceof Error ? error.stack : undefined,
+			);
+		}
 	}
 };
 
@@ -139,7 +185,7 @@ const removeRoomById = async (id: number) => {
 		const room = await Room.findByPk(id);
 
 		if (room === null) {
-			logger.error("Rooms: remove -> failure", {
+			logger.error("Rooms: removeRoomById -> failure", {
 				id,
 				error: "Room not found",
 			});
@@ -148,7 +194,7 @@ const removeRoomById = async (id: number) => {
 		} else {
 			await room.destroy();
 
-			logger.info("Rooms: remove -> success", {
+			logger.info("Rooms: removeRoomById -> success", {
 				id: room.id,
 			});
 
@@ -158,7 +204,7 @@ const removeRoomById = async (id: number) => {
 		if (error instanceof NotFoundError) {
 			throw error;
 		} else {
-			logger.error("Rooms: remove -> failure", error);
+			logger.error("Rooms: removeRoomById -> failure", error);
 
 			throw new InternalServerError(
 				"Something went wrong while removing the room",
@@ -174,7 +220,7 @@ const updateRoom = async (id: number, roomData: roomDto.updateRoom) => {
 		const room = await Room.findByPk(id);
 
 		if (room === null) {
-			logger.error("Rooms: update -> failure", {
+			logger.error("Rooms: updateRoom -> failure", {
 				id,
 				error: "Room not found",
 			});
@@ -183,7 +229,7 @@ const updateRoom = async (id: number, roomData: roomDto.updateRoom) => {
 		} else {
 			await room.update({ ...roomData });
 
-			logger.info("Rooms: update -> success", {
+			logger.info("Rooms: updateRoom -> success", {
 				id: room.id,
 			});
 
@@ -193,7 +239,7 @@ const updateRoom = async (id: number, roomData: roomDto.updateRoom) => {
 		if (error instanceof NotFoundError) {
 			throw error;
 		} else {
-			logger.error("Rooms: update -> failure", error);
+			logger.error("Rooms: updateRoom -> failure", error);
 
 			throw new InternalServerError(
 				"Something went wrong while updating the room",
