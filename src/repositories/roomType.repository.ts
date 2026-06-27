@@ -1,17 +1,17 @@
 import { logger } from "../config/logger.config.ts";
 import RoomType from "../db/models/roomType.ts";
 import * as roomTypeDto from "../dtos/roomType.dto.ts";
-import * as hotelRepository from "./hotel.repository.ts";
 import {
 	InternalServerError,
 	NotFoundError,
 } from "../utils/errors/app.error.ts";
+import Hotel from "../db/models/hotel.ts";
 
 // create a room type entry
 const createRoomType = async (roomTypeData: roomTypeDto.createRoomType) => {
 	try {
 		// check if the hotel even exists
-		const hotel = await hotelRepository.getHotelById(roomTypeData.hotelId);
+		const hotel = await Hotel.findByPk(roomTypeData.hotelId);
 
 		if (hotel === null) {
 			logger.error("RoomTypes: createRoomType -> failure", {
@@ -47,7 +47,7 @@ const createRoomType = async (roomTypeData: roomTypeDto.createRoomType) => {
 const getAllRoomTypesByHotelId = async (hotelId: number) => {
 	try {
 		// check if the hotel even exists
-		const hotel = await hotelRepository.getHotelById(hotelId);
+		const hotel = await Hotel.findByPk(hotelId);
 
 		if (hotel === null) {
 			logger.error("RoomTypes: getAllRoomTypesByHotelId -> failure", {
@@ -169,7 +169,7 @@ const updateRoomType = async (
 		} else {
 			// check if updated hotelId exists
 			if (roomTypeData.hotelId) {
-				const hotel = await hotelRepository.getHotelById(roomTypeData.hotelId);
+				const hotel = await Hotel.findByPk(roomTypeData.hotelId);
 
 				if (hotel === null) {
 					logger.error("RoomTypes: updateRoomType -> failure", {
