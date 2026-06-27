@@ -1,15 +1,27 @@
-interface roomGenerationJobDto {
+interface createRoomGenerationJob {
 	roomTypeId: number;
 	price: number;
 	startDate: string;
 	endDate: string;
-	batchNumber: number;
+	batchSize: number;
+}
+
+interface batchProcessRooms {
+	roomTypeId: number;
+	startDate: Date;
+	endDate: Date;
 }
 
 interface roomGenerationJobResponseDto {
 	totalRoomsCreated: number;
 	totalDatesProccessed: number;
 	success: boolean;
-	erros: string[];
+	errors: string[];
 	jobId: string;
 }
+
+export {
+	createRoomGenerationJob,
+	batchProcessRooms,
+	roomGenerationJobResponseDto,
+};

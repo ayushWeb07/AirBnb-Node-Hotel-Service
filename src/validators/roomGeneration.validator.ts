@@ -5,7 +5,7 @@ const createRoomGenerationJobSchema = z.object({
 	price: z.number().positive(),
 	startDate: z.iso.datetime(),
 	endDate: z.iso.datetime(),
-	batchNumber: z.number().positive(),
+	batchSize: z.number().positive(),
 });
 
 export { createRoomGenerationJobSchema };
