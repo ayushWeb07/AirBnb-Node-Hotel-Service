@@ -139,10 +139,13 @@ const getRoomsByRoomTypeIdAndAvailableDateRange = async (
 		const roomType = await RoomType.findByPk(roomData.roomTypeId);
 
 		if (roomType === null) {
-			logger.error("Rooms: getRoomsByRoomTypeIdAndAvailableDateRange -> failure", {
-				roomTypeId: roomData.roomTypeId,
-				error: "Room type not found",
-			});
+			logger.error(
+				"Rooms: getRoomsByRoomTypeIdAndAvailableDateRange -> failure",
+				{
+					roomTypeId: roomData.roomTypeId,
+					error: "Room type not found",
+				},
+			);
 
 			throw new NotFoundError("Room type not found");
 		}
@@ -227,6 +230,34 @@ const updateRoom = async (id: number, roomData: roomDto.updateRoom) => {
 
 			throw new NotFoundError("Room not found");
 		} else {
+			// check if the hotel even exists
+			if (roomData.hotelId) {
+				const hotel = await Hotel.findByPk(roomData.hotelId);
+
+				if (hotel === null) {
+					logger.error("Rooms: updateRoom -> failure", {
+						hotelId: roomData.hotelId,
+						error: "Hotel not found",
+					});
+
+					throw new NotFoundError("Hotel not found");
+				}
+			}
+
+			// check if the room type even exists
+			if (roomData.roomTypeId) {
+				const roomType = await RoomType.findByPk(roomData.roomTypeId);
+
+				if (roomType === null) {
+					logger.error("Rooms: updateRoom -> failure", {
+						roomTypeId: roomData.roomTypeId,
+						error: "Room type not found",
+					});
+
+					throw new NotFoundError("Room type not found");
+				}
+			}
+
 			await room.update({ ...roomData });
 
 			logger.info("Rooms: updateRoom -> success", {
