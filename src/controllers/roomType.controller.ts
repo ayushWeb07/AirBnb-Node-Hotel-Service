@@ -14,7 +14,9 @@ const createRoomType = async (req: Request, res: Response) => {
 };
 
 const getAllRoomTypesByHotelId = async (req: Request, res: Response) => {
-	const roomTypes = await roomTypeService.getAllRoomTypesByHotelId(Number(req.params.id));
+	const roomTypes = await roomTypeService.getAllRoomTypesByHotelId(
+		Number(req.params.id),
+	);
 
 	res.status(StatusCodes.OK).json({
 		message: "Fetched the room types of the hotel successfully",
@@ -34,7 +36,9 @@ const getRoomTypeById = async (req: Request, res: Response) => {
 };
 
 const removeRoomTypeById = async (req: Request, res: Response) => {
-	const roomType = await roomTypeService.removeRoomTypeById(Number(req.params.id));
+	const roomType = await roomTypeService.removeRoomTypeById(
+		Number(req.params.id),
+	);
 
 	res.status(StatusCodes.OK).json({
 		message: "Removed the room type successfully",
@@ -44,7 +48,10 @@ const removeRoomTypeById = async (req: Request, res: Response) => {
 };
 
 const updateRoomType = async (req: Request, res: Response) => {
-	const roomType = await roomTypeService.updateRoomType(Number(req.params.id), req.body);
+	const roomType = await roomTypeService.updateRoomType(
+		Number(req.params.id),
+		req.body,
+	);
 
 	res.status(StatusCodes.OK).json({
 		message: "Updated the room type successfully",

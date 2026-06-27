@@ -10,6 +10,18 @@ import {
 // create a room type entry
 const createRoomType = async (roomTypeData: roomTypeDto.createRoomType) => {
 	try {
+		// check if the hotel even exists
+		const hotel = await hotelRepository.getHotelById(roomTypeData.hotelId);
+
+		if (hotel === null) {
+			logger.error("RoomTypes: createRoomType -> failure", {
+				hotelId: roomTypeData.hotelId,
+				error: "Hotel not found",
+			});
+
+			throw new NotFoundError("Hotel not found");
+		}
+
 		const newRoomType = await RoomType.create(roomTypeData);
 
 		logger.info("RoomTypes: create -> success", {
@@ -18,12 +30,16 @@ const createRoomType = async (roomTypeData: roomTypeDto.createRoomType) => {
 
 		return newRoomType;
 	} catch (error) {
-		logger.error("RoomTypes: create -> failure", error);
+		if (error instanceof NotFoundError) {
+			throw error;
+		} else {
+			logger.error("RoomTypes: create -> failure", error);
 
-		throw new InternalServerError(
-			"Something went wrong while adding the room type",
-			error instanceof Error ? error.stack : undefined,
-		);
+			throw new InternalServerError(
+				"Something went wrong while adding the room type",
+				error instanceof Error ? error.stack : undefined,
+			);
+		}
 	}
 };
 
@@ -31,7 +47,16 @@ const createRoomType = async (roomTypeData: roomTypeDto.createRoomType) => {
 const getAllRoomTypesByHotelId = async (hotelId: number) => {
 	try {
 		// check if the hotel even exists
-		await hotelRepository.getHotelById(hotelId);
+		const hotel = await hotelRepository.getHotelById(hotelId);
+
+		if (hotel === null) {
+			logger.error("RoomTypes: getAllRoomTypesByHotelId -> failure", {
+				hotelId,
+				error: "Hotel not found",
+			});
+
+			throw new NotFoundError("Hotel not found");
+		}
 
 		const roomTypes = await RoomType.findAll({
 			where: {
@@ -45,12 +70,16 @@ const getAllRoomTypesByHotelId = async (hotelId: number) => {
 
 		return roomTypes;
 	} catch (error) {
-		logger.error("RoomTypes: getAll -> failure", error);
+		if (error instanceof NotFoundError) {
+			throw error;
+		} else {
+			logger.error("RoomTypes: getAll -> failure", error);
 
-		throw new InternalServerError(
-			"Something went wrong while getting all the room types",
-			error instanceof Error ? error.stack : undefined,
-		);
+			throw new InternalServerError(
+				"Something went wrong while getting all the room types",
+				error instanceof Error ? error.stack : undefined,
+			);
+		}
 	}
 };
 
@@ -138,6 +167,20 @@ const updateRoomType = async (
 
 			throw new NotFoundError("Room type not found");
 		} else {
+			// check if updated hotelId exists
+			if (roomTypeData.hotelId) {
+				const hotel = await hotelRepository.getHotelById(roomTypeData.hotelId);
+
+				if (hotel === null) {
+					logger.error("RoomTypes: updateRoomType -> failure", {
+						hotelId: roomTypeData.hotelId,
+						error: "Hotel not found",
+					});
+
+					throw new NotFoundError("Hotel not found");
+				}
+			}
+
 			await roomType.update({ ...roomTypeData });
 
 			logger.info("RoomTypes: update -> success", {
