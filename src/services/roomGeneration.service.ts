@@ -90,17 +90,18 @@ const createRoomGenerationJob = async (
 	};
 };
 
-const batchProcessRooms = async (jobData: roomGenerationDto.batchProcessRooms) => {
-
-    const startDate= jobData.startDate
-    const endDate= jobData.endDate
+const batchProcessRooms = async (
+	jobData: roomGenerationDto.batchProcessRooms,
+) => {
+	const startDate = jobData.startDate;
+	const endDate = jobData.endDate;
 
 	// find the rooms of this roomType id and within this available date
 	const existingRooms =
 		await roomRepository.getRoomsByRoomTypeIdAndAvailableDateRange({
 			roomTypeId: jobData.roomTypeId,
 			startDate,
-			endDate
+			endDate,
 		});
 
 	const existingDates = new Set(
