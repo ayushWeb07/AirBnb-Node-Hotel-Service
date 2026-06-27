@@ -73,8 +73,13 @@ const createRoomGenerationJob = async (
 
 		while (currentDate < endDate) {
 			// calculate the batch end date
-			const batchEndDate = new Date(currentDate);
+			let batchEndDate = new Date(currentDate);
 			batchEndDate.setDate(batchEndDate.getDate() + batchSize);
+
+			// clamp
+			if (batchEndDate > endDate) {
+				batchEndDate = new Date(endDate);
+			}
 
 			// create the rooms
 			const { roomsCreated, datesProcessed } = await batchProcessRooms({
