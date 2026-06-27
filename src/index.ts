@@ -18,8 +18,8 @@ const serverAdapter = new ExpressAdapter();
 serverAdapter.setBasePath("/admin/queues");
 
 createBullBoard({
-    queues: [new BullMQAdapter(roomGenerationQueue)],
-    serverAdapter: serverAdapter,
+	queues: [new BullMQAdapter(roomGenerationQueue)],
+	serverAdapter: serverAdapter,
 });
 
 // setup global middlewares
