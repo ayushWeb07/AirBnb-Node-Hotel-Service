@@ -51,7 +51,7 @@ const createRoomGenerationJob = async (
 
 		// calculate the days
 		const totalDays = Math.ceil(
-			(startDate.getTime() - endDate.getTime()) / (1000 * 60 * 60 * 24),
+			(endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24),
 		);
 
 		if (totalDays === 0) {
@@ -67,13 +67,13 @@ const createRoomGenerationJob = async (
 
 		// batch process the dates and create rooms
 		const batchSize = jobData.batchSize;
-		const currentDate = new Date(startDate.getDate());
+		let currentDate = new Date(startDate);
 		let totalDatesProcessed = 0;
 		let totalRoomsCreated = 0;
 
 		while (currentDate < endDate) {
 			// calculate the batch end date
-			const batchEndDate = new Date(currentDate.getDate());
+			const batchEndDate = new Date(currentDate);
 			batchEndDate.setDate(batchEndDate.getDate() + batchSize);
 
 			// create the rooms
@@ -86,7 +86,9 @@ const createRoomGenerationJob = async (
 			});
 
 			// update the current date and counters
-			currentDate.setDate(batchEndDate.getDate() + 1);
+			currentDate = new Date(batchEndDate);
+			currentDate.setDate(currentDate.getDate() + 1);
+
 			totalDatesProcessed += datesProcessed;
 			totalRoomsCreated += roomsCreated;
 		}
@@ -128,7 +130,7 @@ const batchProcessRooms = async (
 	);
 
 	// find the rooms to create
-	const currentDate = new Date(startDate.getDate());
+	const currentDate = new Date(startDate);
 	let roomsToCreate: roomDto.createRoom[] = [];
 	let datesProcessed = 0;
 	let roomsCreated = 0;
@@ -143,7 +145,7 @@ const batchProcessRooms = async (
 				roomTypeId: jobData.roomTypeId,
 				hotelId: jobData.hotelId,
 				bookingId: null,
-				availableOn: currentDate,
+				availableOn: new Date(currentDate),
 			});
 		}
 
