@@ -8,6 +8,8 @@ interface createRoomGenerationJob {
 
 interface batchProcessRooms {
 	roomTypeId: number;
+	hotelId: number;
+	price: number;
 	startDate: Date;
 	endDate: Date;
 }

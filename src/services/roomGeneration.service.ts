@@ -4,7 +4,6 @@ import * as roomGenerationDto from "../dtos/roomGeneration.dto.ts";
 import * as roomDto from "../dtos/room.dto.ts";
 import { logger } from "../config/logger.config.ts";
 import { BadRequestError, NotFoundError } from "../utils/errors/app.error.ts";
-import room from "../db/models/room.ts";
 
 const createRoomGenerationJob = async (
 	jobData: roomGenerationDto.createRoomGenerationJob,
@@ -26,7 +25,7 @@ const createRoomGenerationJob = async (
 	const endDate = new Date(jobData.endDate);
 
 	// check if the startDate comes prior to endDate
-	if (startDate > endDate) {
+	if (startDate >= endDate) {
 		logger.error("RoomGeneration: createRoomGenerationJob -> failure", {
 			error: "Start date must be prior to end date",
 		});
@@ -48,7 +47,7 @@ const createRoomGenerationJob = async (
 		(startDate.getTime() - endDate.getTime()) / (1000 * 60 * 60 * 24),
 	);
 
-	if (totalDays == 0) {
+	if (totalDays === 0) {
 		logger.error("RoomGeneration: createRoomGenerationJob -> failure", {
 			error:
 				"At least there should be one day gap in between start and end dates",
@@ -91,25 +90,17 @@ const createRoomGenerationJob = async (
 	};
 };
 
-const batchProcessRooms = async ({
-	roomTypeId,
-	hotelId,
-	price,
-	startDate,
-	endDate,
-}: {
-	roomTypeId: number;
-	hotelId: number;
-	price: number;
-	startDate: Date;
-	endDate: Date;
-}) => {
+const batchProcessRooms = async (jobData: roomGenerationDto.batchProcessRooms) => {
+
+    const startDate= jobData.startDate
+    const endDate= jobData.endDate
+
 	// find the rooms of this roomType id and within this available date
 	const existingRooms =
 		await roomRepository.getRoomsByRoomTypeIdAndAvailableDateRange({
-			roomTypeId,
+			roomTypeId: jobData.roomTypeId,
 			startDate,
-			endDate,
+			endDate
 		});
 
 	const existingDates = new Set(
@@ -128,9 +119,9 @@ const batchProcessRooms = async ({
 		if (!existingDates.has(dateStr)) {
 			roomsToCreate.push({
 				number: Math.floor(Math.random() * 100) + 1,
-				price,
-				roomTypeId,
-				hotelId,
+				price: jobData.price,
+				roomTypeId: jobData.roomTypeId,
+				hotelId: jobData.hotelId,
 				bookingId: null,
 				availableOn: currentDate,
 			});
