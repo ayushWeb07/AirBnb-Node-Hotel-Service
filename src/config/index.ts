@@ -6,6 +6,10 @@ interface ServerConfig {
 	LOGTAIL_SOURCE_TOKEN: string;
 	LOGTAIL_URL: string;
 	SENTRY_DSN: string;
+	REDIS_SERVER_HOST: string;
+	REDIS_SERVER_PORT: number;
+	BULLMQ_ROOM_GENERATION_QUEUE_NAME: string;
+	BULLMQ_ROOM_GENERATION_PAYLOAD_NAME: string;
 }
 
 interface DbConfig {
@@ -21,6 +25,12 @@ const serverConfig: ServerConfig = {
 	LOGTAIL_SOURCE_TOKEN: process.env.LOGTAIL_SOURCE_TOKEN || "",
 	LOGTAIL_URL: process.env.LOGTAIL_URL || "",
 	SENTRY_DSN: process.env.SENTRY_DSN || "",
+	REDIS_SERVER_HOST: process.env.REDIS_SERVER_HOST || "localhost",
+	REDIS_SERVER_PORT: Number(process.env.REDIS_SERVER_PORT) || 6379,
+	BULLMQ_ROOM_GENERATION_QUEUE_NAME:
+		process.env.BULLMQ_ROOM_GENERATION_QUEUE_NAME || "",
+	BULLMQ_ROOM_GENERATION_PAYLOAD_NAME:
+		process.env.BULLMQ_ROOM_GENERATION_PAYLOAD_NAME || "",
 };
 
 const dbConfig: DbConfig = {
