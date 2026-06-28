@@ -8,6 +8,8 @@ import {
 import { Op } from "sequelize";
 import Hotel from "../db/models/hotel.ts";
 import RoomType from "../db/models/roomType.ts";
+import { serverConfig } from "../config";
+import { StatusCodes } from "http-status-codes";
 
 // create a room entry
 const createRoom = async (roomData: roomDto.createRoom) => {
@@ -36,6 +38,33 @@ const createRoom = async (roomData: roomDto.createRoom) => {
 			throw new NotFoundError("Room type not found");
 		}
 
+		// check if the booking even exists
+		if (roomData.bookingId) {
+			const bookingServiceUrl =
+				serverConfig.BOOKING_SERVICE_BASE_URL +
+				"/bookings/" +
+				roomData.bookingId;
+			const response = await fetch(bookingServiceUrl);
+
+			if (response.status === StatusCodes.NOT_FOUND) {
+				logger.error("Rooms: createRoom -> failure", {
+					bookingId: roomData.bookingId,
+					error: "Booking not found",
+				});
+
+				throw new NotFoundError("Booking not found");
+			} else if (response.status !== StatusCodes.OK) {
+				logger.error("Rooms: createRoom -> failure", {
+					bookingId: roomData.bookingId,
+					error: "Something went wrong while checking if the booking exists",
+				});
+
+				throw new InternalServerError(
+					"Something went wrong while checking if the booking exists",
+				);
+			}
+		}
+
 		const newRoom = await Room.create(roomData);
 
 		logger.info("Rooms: createRoom -> success", {
@@ -44,7 +73,10 @@ const createRoom = async (roomData: roomDto.createRoom) => {
 
 		return newRoom;
 	} catch (error) {
-		if (error instanceof NotFoundError) {
+		if (
+			error instanceof NotFoundError ||
+			error instanceof InternalServerError
+		) {
 			throw error;
 		} else {
 			logger.error("Rooms: createRoom -> failure", error);
@@ -258,6 +290,33 @@ const updateRoom = async (id: number, roomData: roomDto.updateRoom) => {
 				}
 			}
 
+			// check if the booking even exists
+			if (roomData.bookingId) {
+				const bookingServiceUrl =
+					serverConfig.BOOKING_SERVICE_BASE_URL +
+					"/bookings/" +
+					roomData.bookingId;
+				const response = await fetch(bookingServiceUrl);
+
+				if (response.status === StatusCodes.NOT_FOUND) {
+					logger.error("Rooms: updateRoom -> failure", {
+						bookingId: roomData.bookingId,
+						error: "Booking not found",
+					});
+
+					throw new NotFoundError("Booking not found");
+				} else if (response.status !== StatusCodes.OK) {
+					logger.error("Rooms: updateRoom -> failure", {
+						bookingId: roomData.bookingId,
+						error: "Something went wrong while checking if the booking exists",
+					});
+
+					throw new InternalServerError(
+						"Something went wrong while checking if the booking exists",
+					);
+				}
+			}
+
 			await room.update({ ...roomData });
 
 			logger.info("Rooms: updateRoom -> success", {
@@ -267,7 +326,10 @@ const updateRoom = async (id: number, roomData: roomDto.updateRoom) => {
 			return room;
 		}
 	} catch (error) {
-		if (error instanceof NotFoundError) {
+		if (
+			error instanceof NotFoundError ||
+			error instanceof InternalServerError
+		) {
 			throw error;
 		} else {
 			logger.error("Rooms: updateRoom -> failure", error);

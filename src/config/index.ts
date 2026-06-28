@@ -12,6 +12,7 @@ interface ServerConfig {
 	BULLMQ_ROOM_GENERATION_PAYLOAD_NAME: string;
 	BULLMQ_ROOM_GENERATION_ADD_PAYLOAD_ATTEMPTS: number;
 	BULLMQ_ROOM_GENERATION_ADD_PAYLOAD_DELAY: number;
+	BOOKING_SERVICE_BASE_URL: string;
 }
 
 interface DbConfig {
@@ -37,6 +38,7 @@ const serverConfig: ServerConfig = {
 		Number(process.env.BULLMQ_ROOM_GENERATION_ADD_PAYLOAD_ATTEMPTS) || 3,
 	BULLMQ_ROOM_GENERATION_ADD_PAYLOAD_DELAY:
 		Number(process.env.BULLMQ_ROOM_GENERATION_ADD_PAYLOAD_DELAY) || 1000,
+	BOOKING_SERVICE_BASE_URL: process.env.BOOKING_SERVICE_BASE_URL || "",
 };
 
 const dbConfig: DbConfig = {

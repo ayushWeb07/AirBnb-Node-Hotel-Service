@@ -28,7 +28,9 @@ const setupRoomGenerationWorker = async () => {
 	roomGenerationWorker.on(
 		"failed",
 		(job: Job | undefined, error: Error, prev: string) => {
-			logger.error(`Room generation worker failed to create the rooms: ${error.message}`);
+			logger.error(
+				`Room generation worker failed to create the rooms: ${error.message}`,
+			);
 			throw error;
 		},
 	);
