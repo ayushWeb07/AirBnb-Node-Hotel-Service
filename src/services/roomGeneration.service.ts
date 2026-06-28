@@ -145,7 +145,6 @@ const batchProcessRooms = async (
 
 		if (!existingDates.has(dateStr)) {
 			roomsToCreate.push({
-				number: Math.floor(Math.random() * 100) + 1,
 				price: jobData.price,
 				roomTypeId: jobData.roomTypeId,
 				hotelId: jobData.hotelId,

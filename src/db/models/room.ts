@@ -10,7 +10,6 @@ import sequelize from "./sequelize.ts";
 
 class Room extends Model<InferAttributes<Room>, InferCreationAttributes<Room>> {
 	declare id: CreationOptional<number>;
-	declare number: number;
 	declare price: number;
 	declare roomTypeId: number;
 	declare bookingId: number | null;
@@ -29,11 +28,6 @@ Room.init(
 			primaryKey: true,
 			autoIncrement: true,
 			allowNull: false,
-		},
-		number: {
-			type: DataTypes.INTEGER,
-			allowNull: false,
-			defaultValue: 0,
 		},
 		price: {
 			type: DataTypes.INTEGER,

@@ -9,7 +9,6 @@ const removeSchema = z.object({
 });
 
 const createSchema = z.object({
-	number: z.number().positive(),
 	price: z.number().positive(),
 	roomTypeId: z.number().nonnegative(),
 	bookingId: z.number().nonnegative().optional(),
@@ -18,7 +17,6 @@ const createSchema = z.object({
 });
 
 const updateBodySchema = z.object({
-	number: z.number().positive().optional(),
 	price: z.number().positive().optional(),
 	roomTypeId: z.number().nonnegative().optional(),
 	bookingId: z.number().nonnegative().optional(),

@@ -1,5 +1,4 @@
 interface createRoom {
-	number: number;
 	price: number;
 	roomTypeId: number;
 	bookingId: number | null;
@@ -12,7 +11,6 @@ interface bulkCreateRooms {
 }
 
 interface updateRoom {
-	number?: number;
 	price?: number;
 	roomTypeId?: number;
 	bookingId?: number;
