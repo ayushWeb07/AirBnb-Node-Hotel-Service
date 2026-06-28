@@ -22,12 +22,13 @@ const setupRoomGenerationWorker = async () => {
 	);
 
 	roomGenerationWorker.on("completed", (job: Job) => {
-		logger.info(`New rooms were created successfully`);
+		logger.info(`Room generation worker successfully created the rooms`);
 	});
 
 	roomGenerationWorker.on(
 		"failed",
 		(job: Job | undefined, error: Error, prev: string) => {
+			logger.error(`Room generation worker failed to create the rooms: ${error.message}`);
 			throw error;
 		},
 	);

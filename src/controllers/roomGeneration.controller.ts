@@ -8,7 +8,7 @@ const createRoomGenerationJob = async (req: Request, res: Response) => {
 	await addJobToRoomGenerationQueue(req.body);
 
 	res.status(StatusCodes.CREATED).json({
-		message: "New rooms were created successfully",
+		message: "Successfully triggered the room generation worker, for creating the rooms",
 		success: true,
 	});
 };
