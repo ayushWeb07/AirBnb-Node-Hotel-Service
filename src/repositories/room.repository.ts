@@ -214,6 +214,50 @@ const getRoomsByRoomTypeIdAndAvailableDateRange = async (
 	}
 };
 
+const getAvailableRooms = async (roomData: roomDto.getAvailableRooms) => {
+	try {
+		// check if the room type even exists
+		const roomType = await RoomType.findByPk(roomData.roomTypeId);
+
+		if (roomType === null) {
+			logger.error("Rooms: getAvailableRooms -> failure", {
+				roomTypeId: roomData.roomTypeId,
+				error: "Room type not found",
+			});
+
+			throw new NotFoundError("Room type not found");
+		}
+
+		const rooms = await Room.findAll({
+			where: {
+				roomTypeId: roomData.roomTypeId,
+				availableOn: {
+					[Op.gt]: roomData.startDate,
+					[Op.lt]: roomData.endDate,
+				},
+				bookingId: null,
+			},
+		});
+
+		logger.info("Rooms: getAvailableRooms -> success", {
+			count: rooms.length,
+		});
+
+		return rooms;
+	} catch (error) {
+		if (error instanceof NotFoundError) {
+			throw error;
+		} else {
+			logger.error("Rooms: getAvailableRooms -> failure", error);
+
+			throw new InternalServerError(
+				"Something went wrong while getting all the available rooms",
+				error instanceof Error ? error.stack : undefined,
+			);
+		}
+	}
+};
+
 // remove room entry by id
 const removeRoomById = async (id: number) => {
 	try {
@@ -348,6 +392,7 @@ export {
 	getAllRooms,
 	getRoomById,
 	getRoomsByRoomTypeIdAndAvailableDateRange,
+	getAvailableRooms,
 	removeRoomById,
 	updateRoom,
 };

@@ -24,9 +24,16 @@ interface getRoomsByRoomTypeIdAndAvailableDateRange {
 	endDate: Date;
 }
 
+interface getAvailableRooms {
+	roomTypeId: number;
+	startDate: Date;
+	endDate: Date;
+}
+
 export {
 	createRoom,
 	bulkCreateRooms,
 	updateRoom,
 	getRoomsByRoomTypeIdAndAvailableDateRange,
+	getAvailableRooms,
 };

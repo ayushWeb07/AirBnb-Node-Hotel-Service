@@ -19,6 +19,12 @@ router.get(
 );
 
 router.post(
+	"/check-available",
+	validateRequestBody(roomValidator.getAvailableRoomsSchema),
+	roomController.getAvailableRooms,
+);
+
+router.post(
 	"/",
 	validateRequestBody(roomValidator.createSchema),
 	roomController.createRoom,

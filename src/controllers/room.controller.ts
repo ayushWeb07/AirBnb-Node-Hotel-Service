@@ -33,6 +33,16 @@ const getRoomById = async (req: Request, res: Response) => {
 	});
 };
 
+const getAvailableRooms = async (req: Request, res: Response) => {
+	const rooms = await roomService.getAvailableRooms(req.body);
+
+	res.status(StatusCodes.CREATED).json({
+		message: "Fetched the available rooms successfully",
+		data: rooms,
+		success: true,
+	});
+};
+
 const removeRoomById = async (req: Request, res: Response) => {
 	const room = await roomService.removeRoomById(Number(req.params.id));
 
@@ -53,4 +63,11 @@ const updateRoom = async (req: Request, res: Response) => {
 	});
 };
 
-export { createRoom, getAllRooms, getRoomById, removeRoomById, updateRoom };
+export {
+	createRoom,
+	getAllRooms,
+	getRoomById,
+	getAvailableRooms,
+	removeRoomById,
+	updateRoom,
+};
