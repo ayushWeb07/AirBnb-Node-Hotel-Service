@@ -16,6 +16,11 @@ const getRoomById = async (id: number) => {
 	return room;
 };
 
+const getAvailableRooms = async (roomData: roomDto.getAvailableRooms) => {
+	const rooms = await roomRepository.getAvailableRooms(roomData);
+	return rooms;
+};
+
 const removeRoomById = async (id: number) => {
 	const room = await roomRepository.removeRoomById(id);
 	return room;
@@ -26,4 +31,17 @@ const updateRoom = async (id: number, roomData: roomDto.updateRoom) => {
 	return room;
 };
 
-export { createRoom, getAllRooms, getRoomById, removeRoomById, updateRoom };
+const bookRequiredRooms = async (roomsData: roomDto.bookRequiredRooms) => {
+	const affectedCount = await roomRepository.bookRequiredRooms(roomsData);
+	return affectedCount;
+};
+
+export {
+	createRoom,
+	getAllRooms,
+	getRoomById,
+	getAvailableRooms,
+	removeRoomById,
+	updateRoom,
+	bookRequiredRooms,
+};

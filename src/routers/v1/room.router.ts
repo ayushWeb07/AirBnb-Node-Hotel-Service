@@ -19,6 +19,12 @@ router.get(
 );
 
 router.post(
+	"/check-available",
+	validateRequestBody(roomValidator.getAvailableRoomsSchema),
+	roomController.getAvailableRooms,
+);
+
+router.post(
 	"/",
 	validateRequestBody(roomValidator.createSchema),
 	roomController.createRoom,
@@ -35,6 +41,12 @@ router.patch(
 	validateRequestUrlParams(roomValidator.updateUrlParamsSchema),
 	validateRequestBody(roomValidator.updateBodySchema),
 	roomController.updateRoom,
+);
+
+router.post(
+	"/book-rooms",
+	validateRequestBody(roomValidator.bookRequiredRoomsSchema),
+	roomController.bookRequiredRooms,
 );
 
 export default router;

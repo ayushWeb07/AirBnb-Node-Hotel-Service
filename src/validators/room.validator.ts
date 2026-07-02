@@ -28,10 +28,24 @@ const updateUrlParamsSchema = z.object({
 	id: z.coerce.number().nonnegative(),
 });
 
+const getAvailableRoomsSchema = z.object({
+	roomTypeId: z.number().nonnegative(),
+	startDate: z.iso.datetime(),
+	endDate: z.iso.datetime(),
+});
+
+const bookRequiredRoomsSchema = z.object({
+	bookingId: z.number().nonnegative(),
+	roomIds: z.array(z.number()).min(1)
+});
+
+
 export {
 	getByIdSchema,
 	createSchema,
 	removeSchema,
 	updateBodySchema,
 	updateUrlParamsSchema,
+	getAvailableRoomsSchema,
+	bookRequiredRoomsSchema,
 };

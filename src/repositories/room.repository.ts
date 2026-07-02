@@ -214,6 +214,49 @@ const getRoomsByRoomTypeIdAndAvailableDateRange = async (
 	}
 };
 
+const getAvailableRooms = async (roomData: roomDto.getAvailableRooms) => {
+	try {
+		// check if the room type even exists
+		const roomType = await RoomType.findByPk(roomData.roomTypeId);
+
+		if (roomType === null) {
+			logger.error("Rooms: getAvailableRooms -> failure", {
+				roomTypeId: roomData.roomTypeId,
+				error: "Room type not found",
+			});
+
+			throw new NotFoundError("Room type not found");
+		}
+
+		const rooms = await Room.findAll({
+			where: {
+				roomTypeId: roomData.roomTypeId,
+				availableOn: {
+					[Op.between]: [roomData.startDate, roomData.endDate],
+				},
+				bookingId: null,
+			},
+		});
+
+		logger.info("Rooms: getAvailableRooms -> success", {
+			count: rooms.length,
+		});
+
+		return rooms;
+	} catch (error) {
+		if (error instanceof NotFoundError) {
+			throw error;
+		} else {
+			logger.error("Rooms: getAvailableRooms -> failure", error);
+
+			throw new InternalServerError(
+				"Something went wrong while getting all the available rooms",
+				error instanceof Error ? error.stack : undefined,
+			);
+		}
+	}
+};
+
 // remove room entry by id
 const removeRoomById = async (id: number) => {
 	try {
@@ -342,12 +385,80 @@ const updateRoom = async (id: number, roomData: roomDto.updateRoom) => {
 	}
 };
 
+// book the required rooms
+const bookRequiredRooms = async (roomsData: roomDto.bookRequiredRooms) => {
+	try {
+
+		// check if the booking even exists
+		const bookingServiceUrl =
+			serverConfig.BOOKING_SERVICE_BASE_URL +
+			"/bookings/" +
+			roomsData.bookingId;
+		const response = await fetch(bookingServiceUrl);
+
+		if (response.status === StatusCodes.NOT_FOUND) {
+			logger.error("Rooms: bookRequiredRooms -> failure", {
+				bookingId: roomsData.bookingId,
+				error: "Booking not found",
+			});
+
+			throw new NotFoundError("Booking not found");
+		} else if (response.status !== StatusCodes.OK) {
+			logger.error("Rooms: bookRequiredRooms -> failure", {
+				bookingId: roomsData.bookingId,
+				error: "Something went wrong while checking if the booking exists",
+			});
+
+			throw new InternalServerError(
+				"Something went wrong while checking if the booking exists",
+			);
+		}
+
+		// update the booking id on required rooms
+		const [affectedCount]= await Room.update(
+			{
+				bookingId: roomsData.bookingId
+			},
+			{
+				where: {
+					id: {
+						[Op.in]: roomsData.roomIds
+					}
+				}
+			}
+		)
+
+		logger.info("Rooms: bookRequiredRooms -> success", {
+			bookingId: roomsData.bookingId,
+			affectedCount,
+		});
+
+		return affectedCount;
+	} catch (error) {
+		if (
+			error instanceof NotFoundError ||
+			error instanceof InternalServerError
+		) {
+			throw error;
+		} else {
+			logger.error("Rooms: bookRequiredRooms -> failure", error);
+
+			throw new InternalServerError(
+				"Something went wrong while booking the rooms",
+				error instanceof Error ? error.stack : undefined,
+			);
+		}
+	}
+}
+
 export {
 	createRoom,
 	bulkCreateRooms,
 	getAllRooms,
 	getRoomById,
 	getRoomsByRoomTypeIdAndAvailableDateRange,
+	getAvailableRooms,
 	removeRoomById,
 	updateRoom,
+	bookRequiredRooms,
 };
