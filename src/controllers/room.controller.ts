@@ -36,7 +36,7 @@ const getRoomById = async (req: Request, res: Response) => {
 const getAvailableRooms = async (req: Request, res: Response) => {
 	const rooms = await roomService.getAvailableRooms(req.body);
 
-	res.status(StatusCodes.CREATED).json({
+	res.status(StatusCodes.OK).json({
 		message: "Fetched the available rooms successfully",
 		data: rooms,
 		success: true,
