@@ -232,8 +232,7 @@ const getAvailableRooms = async (roomData: roomDto.getAvailableRooms) => {
 			where: {
 				roomTypeId: roomData.roomTypeId,
 				availableOn: {
-					[Op.gt]: roomData.startDate,
-					[Op.lt]: roomData.endDate,
+					[Op.between]: [roomData.startDate, roomData.endDate],
 				},
 				bookingId: null,
 			},
@@ -386,6 +385,72 @@ const updateRoom = async (id: number, roomData: roomDto.updateRoom) => {
 	}
 };
 
+// book the required rooms
+const bookRequiredRooms = async (roomsData: roomDto.bookRequiredRooms) => {
+	try {
+
+		// check if the booking even exists
+		const bookingServiceUrl =
+			serverConfig.BOOKING_SERVICE_BASE_URL +
+			"/bookings/" +
+			roomsData.bookingId;
+		const response = await fetch(bookingServiceUrl);
+
+		if (response.status === StatusCodes.NOT_FOUND) {
+			logger.error("Rooms: bookRequiredRooms -> failure", {
+				bookingId: roomsData.bookingId,
+				error: "Booking not found",
+			});
+
+			throw new NotFoundError("Booking not found");
+		} else if (response.status !== StatusCodes.OK) {
+			logger.error("Rooms: bookRequiredRooms -> failure", {
+				bookingId: roomsData.bookingId,
+				error: "Something went wrong while checking if the booking exists",
+			});
+
+			throw new InternalServerError(
+				"Something went wrong while checking if the booking exists",
+			);
+		}
+
+		// update the booking id on required rooms
+		const [affectedCount]= await Room.update(
+			{
+				bookingId: roomsData.bookingId
+			},
+			{
+				where: {
+					id: {
+						[Op.in]: roomsData.roomIds
+					}
+				}
+			}
+		)
+
+		logger.info("Rooms: bookRequiredRooms -> success", {
+			bookingId: roomsData.bookingId,
+			affectedCount,
+		});
+
+		return affectedCount;
+	} catch (error) {
+		if (
+			error instanceof NotFoundError ||
+			error instanceof InternalServerError
+		) {
+			throw error;
+		} else {
+			logger.error("Rooms: bookRequiredRooms -> failure", error);
+
+			throw new InternalServerError(
+				"Something went wrong while booking the rooms",
+				error instanceof Error ? error.stack : undefined,
+			);
+		}
+	}
+}
+
 export {
 	createRoom,
 	bulkCreateRooms,
@@ -395,4 +460,5 @@ export {
 	getAvailableRooms,
 	removeRoomById,
 	updateRoom,
+	bookRequiredRooms,
 };

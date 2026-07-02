@@ -43,4 +43,10 @@ router.patch(
 	roomController.updateRoom,
 );
 
+router.post(
+	"/book-rooms",
+	validateRequestBody(roomValidator.bookRequiredRoomsSchema),
+	roomController.bookRequiredRooms,
+);
+
 export default router;

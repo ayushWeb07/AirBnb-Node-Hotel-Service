@@ -63,6 +63,18 @@ const updateRoom = async (req: Request, res: Response) => {
 	});
 };
 
+const bookRequiredRooms = async (req: Request, res: Response) => {
+	const affectedCount = await roomService.bookRequiredRooms(req.body);
+
+	res.status(StatusCodes.OK).json({
+		message: "Rooms were booked successfully",
+		data: {
+			affectedCount,
+		},
+		success: true,
+	});
+};
+
 export {
 	createRoom,
 	getAllRooms,
@@ -70,4 +82,5 @@ export {
 	getAvailableRooms,
 	removeRoomById,
 	updateRoom,
+	bookRequiredRooms,
 };

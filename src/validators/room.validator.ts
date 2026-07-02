@@ -34,6 +34,12 @@ const getAvailableRoomsSchema = z.object({
 	endDate: z.iso.datetime(),
 });
 
+const bookRequiredRoomsSchema = z.object({
+	bookingId: z.number().nonnegative(),
+	roomIds: z.array(z.number()).min(1)
+});
+
+
 export {
 	getByIdSchema,
 	createSchema,
@@ -41,4 +47,5 @@ export {
 	updateBodySchema,
 	updateUrlParamsSchema,
 	getAvailableRoomsSchema,
+	bookRequiredRoomsSchema,
 };

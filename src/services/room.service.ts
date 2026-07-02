@@ -31,6 +31,11 @@ const updateRoom = async (id: number, roomData: roomDto.updateRoom) => {
 	return room;
 };
 
+const bookRequiredRooms = async (roomsData: roomDto.bookRequiredRooms) => {
+	const affectedCount = await roomRepository.bookRequiredRooms(roomsData);
+	return affectedCount;
+};
+
 export {
 	createRoom,
 	getAllRooms,
@@ -38,4 +43,5 @@ export {
 	getAvailableRooms,
 	removeRoomById,
 	updateRoom,
+	bookRequiredRooms,
 };
